@@ -4,13 +4,10 @@ solved challanges description -> https://github.com/GeorgiyO/programming-challen
 
 source code structure:
 
-challanges {
-  difficult[] {
-    challange[] {
-      src {...}
-      description
-    }
-  }
-}
+* challanges
+  * difficult[]
+     * challange[]
+       * src {...}
+       * description
 
 ![alt text](https://i.imgur.com/frF3nX9.jpg)
