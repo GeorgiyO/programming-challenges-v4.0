@@ -1,6 +1,6 @@
 # programming-challenges-v4.0
 
-solved challanges description -> ![alt text](https://github.com/[username]/[reponame]/descriptions.md with hrefs to description
+solved challanges description -> ![alt text](https://github.com/GeorgiyO/programming-challenges-v4.0/descriptions.md with hrefs to description
 
 source code structure:
 
