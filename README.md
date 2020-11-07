@@ -4,10 +4,8 @@ solved challanges description -> https://github.com/GeorgiyO/programming-challen
 
 source code structure:
 
-* challanges
-  * difficult[]
-    * challange[]
-      * src {...}
-      * description
+different projects in different branch:
+
+difficult-number-name
 
 ![alt text](https://i.imgur.com/frF3nX9.jpg)
