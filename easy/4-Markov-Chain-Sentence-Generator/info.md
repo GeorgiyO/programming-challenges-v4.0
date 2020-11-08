@@ -36,4 +36,4 @@ Markov chain can be turned into a sentences generator.
 
 simple text markov chain:
 
-![alt text](easy/4-Markov-Chain-Sentence-Generator/images/Безымянный.png)
+![alt text](https://github.com/GeorgiyO/programming-challenges-v4.0/blob/4-Markov-Chain-Sentence-Generator/easy/4-Markov-Chain-Sentence-Generator/images/%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9.png)
