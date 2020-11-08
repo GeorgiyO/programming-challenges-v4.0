@@ -21,7 +21,7 @@ public class Tests {
         HashMap<String, Double> map = new HashMap<>();
         markovChain.put("one", map);
         map.put("two", 0.5);
-        map.put("three", 0.5);
+        map.put("three", 1.0);
 
         map = new HashMap<>();
         markovChain.put("two", map);
@@ -59,5 +59,4 @@ public class Tests {
     public void markovChainBuilding() {
         assertEquals(markovChain, probabilityCalculator.getProbabilities(simpleText));
     }
-
 }

@@ -1,8 +1,8 @@
 package org.nekogochan.markov.chain;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProbabilityCalculator {
 
@@ -14,6 +14,7 @@ public class ProbabilityCalculator {
     public HashMap<String, HashMap<String, Double>> getProbabilities(String text) {
         setWords(text);
         setProbabilities();
+        distribute();
         return probabilities;
     }
 
@@ -87,12 +88,24 @@ public class ProbabilityCalculator {
 
     private void normalizeProbabilities() {
         for (var probabilitiesEntry : probabilities.entrySet()) {
-
             int count = possibilitiesCount.get(probabilitiesEntry.getKey());
             Map<String, Double> map = probabilitiesEntry.getValue();
 
-            for (var entry : map.entrySet()) {
-                entry.setValue(entry.getValue() / count);
+            for (var key : map.keySet()) {
+                map.merge(key, (double) count, (old, extra) -> old / extra);
+            }
+        }
+    }
+
+    private void distribute() {
+        for (var entry : probabilities.entrySet()) {
+            Map<String, Double> map = entry.getValue();
+            AtomicReference<Double> current = new AtomicReference<>(0.0);
+            for (var key : map.keySet()) {
+                map.merge(key, current.get(), (old, extra) -> {
+                    current.set(old + extra);
+                    return current.get();
+                });
             }
         }
     }
