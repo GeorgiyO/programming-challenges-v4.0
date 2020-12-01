@@ -1,17 +1,20 @@
 package org.nekogochan.markov.chain;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ProbabilityCalculator {
 
-    private HashMap<String, HashMap<String, Double>> probabilities = new HashMap<>(); // first word, <second word, probability>
-    private HashMap<String, Integer> possibilitiesCount = new HashMap<>();
+    private HashMap<String, HashMap<String, Double>> probabilities;
+    private HashMap<String, Integer> possibilitiesCount;
 
     private String[][] words;
 
     public HashMap<String, HashMap<String, Double>> getProbabilities(String text) {
+        probabilities = new HashMap<>();
+        possibilitiesCount = new HashMap<>();
         setWords(text);
         setProbabilities();
         distribute();
@@ -19,11 +22,15 @@ public class ProbabilityCalculator {
     }
 
     private void setWords(String text) {
-        text = text.replaceAll("[\\p{Punct}&&[^\\.]]", "");
+        text = text.strip()
+                .replaceAll("[\\p{Punct}&&[^.]]", "")
+                .replaceAll("[\s]+", " ");
+
         String[] sentences = text.split("\\.");
+
         words = new String[sentences.length][];
         for (int i = 0; i < sentences.length; i++) {
-            words[i] = sentences[i].strip().split(" ");
+            words[i] = sentences[i].trim().split(" ");
             for (int j = 0; j < words[i].length; j++) {
                 words[i][j] = words[i][j].toLowerCase();
             }

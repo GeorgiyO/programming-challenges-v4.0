@@ -12,7 +12,9 @@ public class ShitGenerator {
     private Random random = new Random();
 
     private String currentWord;
-    private StringBuilder shitpost = new StringBuilder();
+    private StringBuilder shitpost;
+
+    private boolean first = true;
 
 
     public void setMarkovChain(String text) {
@@ -20,6 +22,7 @@ public class ShitGenerator {
     }
 
     public String getShitpost(int sentences) {
+        shitpost = new StringBuilder();
         setFirstWord();
         buildShitpost(sentences);
         return shitpost.toString();
@@ -30,7 +33,8 @@ public class ShitGenerator {
 
         int index = random.nextInt(map.size());
         currentWord = new ArrayList<String>(map.keySet()).get(index);
-        shitpost.append(currentWord);
+        appendToShitpost(currentWord);
+        first = false;
     }
 
     private void buildShitpost(int sentences) {
@@ -43,7 +47,7 @@ public class ShitGenerator {
     private void buildSentence() {
         do {
             appendNewWord();
-        } while (currentWord != ".");
+        } while (!currentWord.equals("."));
     }
 
     private void appendNewWord() {
@@ -54,11 +58,22 @@ public class ShitGenerator {
                 currentWord = entry.getKey();
                 if (currentWord == ".") {
                     shitpost.append('.');
+                    first = true;
                 } else {
-                    shitpost.append(' ').append(currentWord);
+                    shitpost.append(' ');
+                    appendToShitpost(currentWord);
                 }
                 break;
             }
         }
+    }
+
+    private void appendToShitpost(String str) {
+        if (first) {
+            shitpost.append("\n");
+            str = str.substring(0, 1).toUpperCase() + str.substring(1);
+            first = false;
+        }
+        shitpost.append(str);
     }
 }
