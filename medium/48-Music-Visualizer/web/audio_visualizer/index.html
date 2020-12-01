@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+    <div id="root">
+        <main>
+            <section id="audioSection">
+                <input type="file" accept="audio/mpeg" id="source" name="source">
+                <label for="source" class="button-style fill">Выбрать музыку</label>
+                <audio id="audio" controls>
+                    <source id="mp3Source" type="audio/mp3" src="audio/default.mp3"/>
+                </audio>
+                <hr>
+                <button class="fill" onclick="setDefaultAudio()">Установить по умолчанию</button>
+            </section>
+            <section>
+                <div id="visualizer"></div>
+            </section>
+        </main>
+    </div>
+    <script src="js/AudioHandler.js"></script>
+    <script src="js/visualizer/SvgVisualizer.js"></script>
+    <script src="js/init.js"></script>
+</body>
+</html>
