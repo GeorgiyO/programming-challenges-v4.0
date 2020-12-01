@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shitpost generator</title>
+</head>
+<body>
+    <p>Write text for generate chain here:</p>
+    <textarea id="textForChain">
+        Elephants are mammals of the family Elephantidae and the largest existing land animals. Three species are
+        currently recognised: the African bush elephant, the African forest elephant, and the Asian elephant. Elephantidae
+        is the only surviving family of the order Proboscidea; extinct members include the mastodons. The family Elephantidae
+        also contains several now-extinct groups, including the mammoths and straight-tusked elephants. African elephants have
+        larger ears and concave backs, whereas Asian elephants have smaller ears, and convex or level backs. Distinctive features
+        of all elephants include a long proboscis called a trunk, tusks, large ear flaps, massive legs, and tough but sensitive skin.
+        The trunk is used for breathing, bringing food and water to the mouth, and grasping objects. Tusks, which are derived from
+        the incisor teeth, serve both as weapons and as tools for moving objects and digging. The large ear flaps assist in maintaining
+        a constant body temperature as well as in communication. The pillar-like legs carry their great weight.
+    </textarea>
+    <br>
+    <button onclick="setChain()">
+        set chain
+    </button>
+    <div id="infoDiv"></div>
+    <hr>
+    <p>sentences count</p>
+    <input id="sentences-count" value="10">
+    <button onclick="getShitpost()">
+        get shitpost
+    </button>
+    <p id="shitpost"></p>
+
+    <script type="text/javascript">
+
+        setChain();
+
+        function ajax(method, url, async, message, func) {
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, url, async);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState != 4)
+                    return;
+                if (xhr.status != 200) {
+                    alert(xhr.status + ': ' + xhr.statusText);
+                } else {
+                    func(xhr.responseText);
+                }
+            }
+            xhr.send(message);
+        }
+
+        function setChain() {
+            ajax("POST", "/shit-generator/shitpost/set", true,
+                "text=" + document.getElementById("textForChain").value, (response) => {
+
+                document.getElementById("infoDiv").innerText = response === "OK" ?
+                    "chain setted" :
+                    "something went wrong";
+            });
+        }
+
+        function getShitpost() {
+            ajax("GET", "/shit-generator/shitpost/get/" + document.getElementById("sentences-count").value,
+                true, "", (response) => {
+
+                document.getElementById("shitpost").innerText = response;
+                });
+        }
+    </script>
+
+</body>
+</html>
