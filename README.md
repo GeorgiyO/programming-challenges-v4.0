@@ -4,8 +4,13 @@ solved challanges description -> https://github.com/GeorgiyO/programming-challen
 
 source code structure:
 
-different projects in different branch:
+hardness -> number int table
 
-difficult-number-name
+current result:
+
+easy:     2
+medium:   3
+hard:     0
+fuck you: 0
 
 ![alt text](https://i.imgur.com/frF3nX9.jpg)
