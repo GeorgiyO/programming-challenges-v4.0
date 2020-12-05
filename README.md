@@ -8,9 +8,9 @@ hardness -> number int table
 
 current result:
 
-easy:     2
-medium:   3
-hard:     0
-fuck you: 0
+easy:     2<br>
+medium:   3<br>
+hard:     0<br>
+fuck you: 0<br>
 
 ![alt text](https://i.imgur.com/frF3nX9.jpg)
