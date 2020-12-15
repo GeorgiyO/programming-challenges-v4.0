@@ -17,7 +17,7 @@ public class Main {
 
     // значения A,B отрезка [A, B]
     private static final double A = 0;
-    private static final double B = Math.PI;
+    private static final double B = 3;
     // количество значений в таблцие x,y
     private static final int SIZE = 8;
 
@@ -25,10 +25,8 @@ public class Main {
     static Function foo = new Function() {
         @Override
         public double getValue(double[] xValues, double[] parameters) {
-            double a = parameters[0];
-            double b = parameters[1];
             double x = xValues[0];
-            return Math.sin(a * x + b);
+            return Math.log(2 * x + 1) + 2 * Math.sin(3 * x);
         }
 
         @Override
@@ -111,7 +109,7 @@ public class Main {
     static {
         tableCalculator.setFoo(foo);
 
-        tableCalculator.configureTable(A, B, SIZE, new double[]{2, -Math.PI / 3});
+        tableCalculator.configureTable(A, B, SIZE, new double[]{});
 
         double[] xValues = tableCalculator.getXValues();
 
