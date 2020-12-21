@@ -1,5 +1,8 @@
 package org.nekogochan.markov.chain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,69 +14,82 @@ public class ShitGenerator {
     private Map<String, HashMap<String, Double>> markovChain;
     private Random random = new Random();
 
-    private String currentWord;
-    private StringBuilder shitpost;
+    private String current;
+    private StringBuilder post;
 
-    private boolean first = true;
-
+    private boolean endOfSentence;
 
     public void setMarkovChain(String text) {
         markovChain = calculator.getProbabilities(text);
+        LoggerFactory.getLogger(this.getClass()).info(markovChain.toString());
     }
 
-    public String getShitpost(int sentences) {
-        shitpost = new StringBuilder();
+    public String createPost(int sentences) {
+        post = new StringBuilder();
+        fillPost(sentences);
+        return post.toString();
+    }
+
+    private void fillPost(int sentences) {
         setFirstWord();
-        buildShitpost(sentences);
-        return shitpost.toString();
+        for (int i = 0; i < sentences; i++) {
+            appendSentence();
+        }
     }
 
     private void setFirstWord() {
-        Map<String, Double> map = markovChain.get(".");
-
-        int index = random.nextInt(map.size());
-        currentWord = new ArrayList<String>(map.keySet()).get(index);
-        appendToShitpost(currentWord);
-        first = false;
+        var map = markovChain.get(".");
+        int i = random.nextInt(map.size());
+        current = new ArrayList<>(map.keySet()).get(i);
     }
 
-    private void buildShitpost(int sentences) {
-        while (sentences > 0) {
-            buildSentence();
-            sentences--;
+    private void appendSentence() {
+        createSentenceBeginning();
+        while (!endOfSentence) {
+            createMiddleWord();
         }
     }
 
-    private void buildSentence() {
-        do {
-            appendNewWord();
-        } while (!currentWord.equals("."));
+    private void createSentenceBeginning() {
+        var dotMap = markovChain.get(".");
+        var currentWordMap = markovChain.get(current);
+        var merged = MathUtils.mergeProbabilityMaps(dotMap, currentWordMap);
+        if (merged.size() == 0) merged = dotMap;
+
+        var word = getRandWord(merged);
+        current = word;
+        try {
+            appendToPost(word.substring(0, 1).toUpperCase() + word.substring(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerFactory.getLogger(this.getClass() + ".createSentenceBeginning").info(current + " " + word + "\n" + merged);
+        }
+        endOfSentence = false;
     }
 
-    private void appendNewWord() {
-        Map<String, Double> map = markovChain.get(currentWord);
+    private void createMiddleWord() {
+        var map = markovChain.get(current);
+        var word = map == null ? "." : getRandWord(map);
+        if (word.equals(".")) {
+            endOfSentence = true;
+            post.append(word); // без пробела после слова и привязки current = word
+        } else {
+            appendToPost(word);
+            current = word;
+        }
+    }
+
+    private String getRandWord(Map<String, Double> source) {
         double d = random.nextDouble();
-        for (var entry : map.entrySet()) {
-            if (entry.getValue() > d) {
-                currentWord = entry.getKey();
-                if (currentWord == ".") {
-                    shitpost.append('.');
-                    first = true;
-                } else {
-                    shitpost.append(' ');
-                    appendToShitpost(currentWord);
-                }
-                break;
+        for (var e : source.entrySet()) {
+            if (e.getValue() > d) {
+                return e.getKey();
             }
         }
+        return (String) source.keySet().toArray()[0];
     }
 
-    private void appendToShitpost(String str) {
-        if (first) {
-            shitpost.append("\n");
-            str = str.substring(0, 1).toUpperCase() + str.substring(1);
-            first = false;
-        }
-        shitpost.append(str);
+    private void appendToPost(String word) {
+        post.append(' ').append(word);
     }
 }

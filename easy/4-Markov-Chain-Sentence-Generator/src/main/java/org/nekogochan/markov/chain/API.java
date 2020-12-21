@@ -26,7 +26,6 @@ public class API {
     @PostMapping("/shitpost/set")
     @ResponseBody
     public String setShitpostText(@RequestParam("text") String text) {
-        LoggerFactory.getLogger("").info(text);
         shitGenerator.setMarkovChain(text);
         return "OK";
     }
@@ -34,8 +33,7 @@ public class API {
     @GetMapping("/shitpost/get/{sentences}")
     @ResponseBody
     public String getShitpost(@PathVariable("sentences") int sentences) {
-        LoggerFactory.getLogger("").info(String.valueOf(sentences));
-        return shitGenerator.getShitpost(sentences);
+        return shitGenerator.createPost(sentences);
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package org.nekogochan.markov.chain;
 
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,13 +10,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ProbabilityCalculator {
 
     private HashMap<String, HashMap<String, Double>> probabilities;
-    private HashMap<String, Integer> possibilitiesCount;
 
     private String[][] words;
 
     public HashMap<String, HashMap<String, Double>> getProbabilities(String text) {
         probabilities = new HashMap<>();
-        possibilitiesCount = new HashMap<>();
         setWords(text);
         setProbabilities();
         distribute();
@@ -23,8 +23,11 @@ public class ProbabilityCalculator {
 
     private void setWords(String text) {
         text = text.strip()
+                .replace('\n', ' ')
                 .replaceAll("[\\p{Punct}&&[^.]]", "")
-                .replaceAll("[\s]+", " ");
+                .replaceAll("[\s]+", " ")
+                .replaceAll("[.]+", ".")
+                ;
 
         String[] sentences = text.split("\\.");
 
@@ -73,18 +76,8 @@ public class ProbabilityCalculator {
     }
 
     private void appendBound(String first, String second) {
-        putToMapsIfAbsent(first);
-        incrementPossibilities(first);
+        probabilities.putIfAbsent(first, new HashMap<>());
         appendProbability(first, second);
-    }
-
-    private void putToMapsIfAbsent(String word) {
-        probabilities.putIfAbsent(word, new HashMap<>());
-        possibilitiesCount.putIfAbsent(word, 0);
-    }
-
-    private void incrementPossibilities(String first) {
-        possibilitiesCount.merge(first, 1, Integer::sum);
     }
 
     private void appendProbability(String first, String second) {
@@ -95,12 +88,7 @@ public class ProbabilityCalculator {
 
     private void normalizeProbabilities() {
         for (var probabilitiesEntry : probabilities.entrySet()) {
-            int count = possibilitiesCount.get(probabilitiesEntry.getKey());
-            Map<String, Double> map = probabilitiesEntry.getValue();
-
-            for (var key : map.keySet()) {
-                map.merge(key, (double) count, (old, extra) -> old / extra);
-            }
+            MathUtils.normalizeProbabilities(probabilitiesEntry.getValue());
         }
     }
 
