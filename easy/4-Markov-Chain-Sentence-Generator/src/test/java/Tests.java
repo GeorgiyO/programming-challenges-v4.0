@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.nekogochan.markov.chain.MathUtils;
 import org.nekogochan.markov.chain.ProbabilityCalculator;
 
 import java.lang.reflect.Field;
@@ -58,5 +60,23 @@ public class Tests {
     @Test
     public void markovChainBuilding() {
         assertEquals(markovChain, probabilityCalculator.getProbabilities(simpleText));
+    }
+
+    @Test
+    public void mapsMerging() {
+        Map<String, Double> first = new HashMap<>();
+        Map<String, Double> second = new HashMap<>();
+
+        first.put("a", 0.5);
+        first.put("b", 0.5);
+
+        second.put("a", 0.2);
+        second.put("b", 0.4);
+        second.put("c", 0.4);
+
+        Map<String, Double> result = MathUtils.mergeProbabilityMaps(first, second);
+
+        assertEquals(1.0 / 3.0, result.get("a"));
+        assertEquals(2.0 / 3.0, result.get("b"));
     }
 }
