@@ -10,7 +10,7 @@ current result:
 
 easy:     2<br>
 medium:   3<br>
-hard:     0<br>
+hard:     1<br>
 fuck you: 0<br>
 
 ![alt text](https://i.imgur.com/frF3nX9.jpg)
